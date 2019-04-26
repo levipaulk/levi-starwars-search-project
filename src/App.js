@@ -8,18 +8,14 @@ export default class App extends React.Component {
   state = {
     results: [],
     error: null,
-    baseURL: "https://swapi.co/api/"
+    baseURL: "https://swapi.co/api/",
+    loading: false,
+    noResults: false
   }
-
-  // componentDidMount() {
-  //   const names = this.props.testdata.map(result => result.name)
-  //   this.setState({
-  //     results: names
-  //   })
-  // }
 
   apiGet = (searchTerm, searchCategory) => {
     console.log(searchTerm, searchCategory)
+    this.setState({loading:true})
     fetch(this.state.baseURL+searchCategory+'/?search='+encodeURI(searchTerm))
     .then(res => {
       if (!res.ok) throw new Error("API fetch request did not succeed")
@@ -29,11 +25,17 @@ export default class App extends React.Component {
       const results = data.results.map(obj => obj.name)
       console.log(results)
       this.setState({
-        results
+        results,
+        loading: false
       })
+      this.noResults()
     })
   }
 
+  noResults = () => {
+    this.state.results.length === 0 ? this.setState({noResults: true}) : this.setState({noResults: false})
+  }
+  
   render() {
     return (
       <div className="App">
@@ -42,7 +44,7 @@ export default class App extends React.Component {
         </header>
         <main>
           <ErrorBoundary><Search apiGet={this.apiGet}/></ErrorBoundary>
-          <ErrorBoundary><Results results={this.state.results}/></ErrorBoundary>
+          <ErrorBoundary><Results results={this.state.results} loading={this.state.loading} noResults={this.state.noResults}/></ErrorBoundary>
         </main>
       </div>
     );

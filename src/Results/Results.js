@@ -13,10 +13,16 @@ export default function Result(props) {
             </li>)
         })}
         </ul>
+        <div>
+          {props.loading && <h4>Loading...</h4>}
+          {props.noResults && <h4>No Results</h4>}
+        </div>
     </div>
   );
 }
 
 Result.propTypes = {
-    results: PropTypes.array
+    results: PropTypes.array,
+    loading: PropTypes.bool,
+    noResults: PropTypes.bool
 }
