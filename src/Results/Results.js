@@ -1,13 +1,22 @@
 import React from 'react';
 import IndividualResult from '../IndividualResult/IndividualResult';
+import PropTypes from 'prop-types';
 
-function Result(props) {
+export default function Result(props) {
   return (
-    <div className="Result">
-        <h3>{props.hello}</h3>
-        <IndividualResult hello={props.hello} />
+    <div className="results">
+        <ul className="result-list">
+        {props.results.map(result => {
+          return (
+            <li id={result}>
+              <IndividualResult result={result}/>
+            </li>)
+        })}
+        </ul>
     </div>
   );
 }
 
-export default Result;
+Result.propTypes = {
+    results: PropTypes.array
+}
